@@ -1,2 +1,3 @@
-# MCM_Assignments
-Assignment for Modeling and Control of Manipulators course
+# Modeling and Control of Manipulators
+-----------------
+Assignment 1 - Equivalent Representations of Orientation Matrices
