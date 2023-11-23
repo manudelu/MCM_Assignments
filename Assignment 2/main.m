@@ -13,16 +13,22 @@ geom_model = BuildTree();
 
 % Useful initizializations
 numberOfLinks = 7;                    % number of manipulator's links.
-linkType =                          % boolean that specifies two possible link types: Rotational, Prismatic.
-bri= zeros(3,numberOfLinks);        % Basic vector of i-th link w.r.t. base
-bTi = zeros(4,4,numberOfLinks);     % Trasformation matrix i-th link w.r.t. base
+linkType = [0,0,0,0,0,0,0];     % boolean that specifies two possible link types: Rotational, Prismatic.
+bri= zeros(3,numberOfLinks);          % Basic vector of i-th link w.r.t. base
+bTi = zeros(4,4,numberOfLinks);       % Trasformation matrix i-th link w.r.t. base
 
 iTj = zeros(4,4,1);
 % Initial joint configuration 
-q = [0,0,0,0,0,0,0];
+q1 = [0,0,0,0,0,0,0];
+q2 = [0,0,0,0,0,pi/2,0];
+q3 = [0,pi/2,0,-pi/2,0,0,0];
+q4 = [pi/4,pi/2,-pi/8,-pi/2,pi/4,2*pi/3,0];
 
 % Q1.1 and Q1.2
-biTei = GetDirectGeometry();
+biTei1 = GetDirectGeometry(q1, iTj, linkType);
+biTei2 = GetDirectGeometry(q2, iTj, linkType);
+biTei3 = GetDirectGeometry(q3, iTj, linkType);
+biTei4 = GetDirectGeometry(q4, iTj, linkType);
 
 %Q1.3
 for i =1:numberOfLinks
