@@ -32,16 +32,17 @@ biTei4 = GetDirectGeometry(q4, geom_model, linkType);
 
 %%
 % Q1.3
-for i = 1:numberOfLinks
-    bTi(:,:,i)= GetTransformationWrtBase(biTei1, i);
+linkNumber = 3;
+for i = 1:linkNumber
+    bTin = GetTransformationWrtBase(biTei1, i);
 end
 
 linkNumber_i = 0;
-linkNumber_j = 2;
+linkNumber_j = 3;
 iTj = GetFrameWrtFrame(linkNumber_i, linkNumber_j, biTei1);
 
-for i = 1:numberOfLinks
-    bri(:,i) = GetBasicVectorWrtBase(biTei1, i);
+for i = 1:linkNumber
+    bri = GetBasicVectorWrtBase(biTei1, i);
 end
 %%
 % Q1.4
@@ -65,5 +66,5 @@ qf = [qf1', qf2', qf3', qf4', qf5', qf6'];
 numberOfSteps = 100; 
 
 for n = 1:6
-    PlotConfigurationDirectKinematic(numberOfSteps, qi(:,n), qf(:,n), geom_model, linkType, n)
+    PlotManipulator(numberOfSteps, qi(:,n), qf(:,n), geom_model, linkType, n)
 end
