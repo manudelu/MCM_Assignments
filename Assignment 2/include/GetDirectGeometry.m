@@ -15,7 +15,7 @@ function [iTj_q] = GetDirectGeometry(q, iTj, linkType)
 numberOfLinks = length(linkType);
 
 for i = 1:numberOfLinks
-    iTj_q(:,:,i) = DirectGeometry(q(i),iTj(:,:,i), linkType(i));
+    iTj_q(:,:,i) = DirectGeometry(q(i),iTj(:,:,i),linkType(i));
 end
 
 end

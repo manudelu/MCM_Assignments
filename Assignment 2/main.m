@@ -23,20 +23,22 @@ q2 = [0,0,0,0,0,pi/2,0];
 q3 = [0,pi/2,0,-pi/2,0,0,0];
 q4 = [pi/4,pi/2,-pi/8,-pi/2,pi/4,2*pi/3,0];
 
+%%
 % Q1.1 and Q1.2
 biTei1 = GetDirectGeometry(q1, geom_model, linkType);
 biTei2 = GetDirectGeometry(q2, geom_model, linkType);
 biTei3 = GetDirectGeometry(q3, geom_model, linkType);
 biTei4 = GetDirectGeometry(q4, geom_model, linkType);
 
-%Q1.3
+%%
+% Q1.3
 for i = 1:numberOfLinks
     bTi(:,:,i)= GetTransformationWrtBase(biTei1, i);
 end
 
 linkNumber_i = 0;
 linkNumber_j = 2;
-iTj = GetFrameWrtFrame(linkNumber_i, linkNumber_j, biTei1)
+iTj = GetFrameWrtFrame(linkNumber_i, linkNumber_j, biTei1);
 
 for i = 1:numberOfLinks
     bri(:,i) = GetBasicVectorWrtBase(biTei1, i);
@@ -44,11 +46,24 @@ end
 %%
 % Q1.4
 % Hint: use plot3() and line() matlab functions. 
-qi = q;
-qf = [];
-numberOfSteps =100;
+qi1 = q1;
+qi2 = q3;
+qi3 = [1.3,0.1,0.1,1,0.2,0.3,1.3];
+qi4 = [3,0.5,0,0.1,0.8,0.7,0.3];
+qi5 = [1.2,0.2,0.7,2.1,1,0,0.9];
+qi6 = q1;
+qi = [qi1', qi2', qi3', qi4', qi5', qi6'];
 
-for i = 1:numberOfSteps
-%-------------------MOVE----------------------%
-    
+qf1 = q4;
+qf2 = q1;
+qf3 = [2,2,2,2,2,2,2];
+qf4 = [2,3,4,2,1,3,2];
+qf5 = [2.3,1,0.4,1.7,1,0.3,1.5];
+qf6 = [0,pi/2,0,-pi/2,0,pi/4,0];
+qf = [qf1', qf2', qf3', qf4', qf5', qf6'];
+
+numberOfSteps = 100; 
+
+for n = 1:6
+    PlotConfigurationDirectKinematic(numberOfSteps, qi(:,n), qf(:,n), geom_model, linkType, n)
 end
