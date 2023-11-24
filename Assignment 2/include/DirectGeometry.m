@@ -11,13 +11,14 @@ function iTj_q = DirectGeometry(qi, iTj, linkType)
 % into account the actual rotation/traslation of the joint
 
 if linkType == 0 % rotational
-    Rz = [cos(qi) -sin(qi) 0; sin(qi) cos(q1) 0; 0 0 1];
+    Rz = [cos(qi) -sin(qi) 0; sin(qi) cos(qi) 0; 0 0 1];
     iRj = iTj(1:3, 1:3)*Rz;
     iTj_q = [iRj iTj(1:3, 4); 0 0 0 1];
 
 elseif linkType == 1 % prismatic
     
     % due to the config of the robot there isn't any prismatic joint
+    disp('Erros, due to the config of the robot there isnt any prismatic joint');
 
 end
 
