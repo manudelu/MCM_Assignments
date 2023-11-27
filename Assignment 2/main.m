@@ -62,5 +62,5 @@ qf = [qf1', qf2', qf3', qf4', qf5', qf6'];
 numberOfSteps = 100; 
 
 for n = 1:6
-    PlotMovement(numberOfSteps, qi(:,n), qf(:,n), geom_model, linkType, n)
+    PlotMotion(numberOfSteps, qi(:,n), qf(:,n), geom_model, linkType, n)
 end
