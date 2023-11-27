@@ -1,4 +1,4 @@
-function [] = PlotConfigurationDirectKinematic(numberOfSteps, qi, qf, geom_model, linkType, n)
+function [] = PlotManipulator(numberOfSteps, qi, qf, geom_model, linkType, n)
 %%% PlotConfigurationDirectKinematic function
 
 % Inputs:
