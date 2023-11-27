@@ -32,12 +32,12 @@ biTei4 = GetDirectGeometry(q4, geom_model, linkType);
 
 %%
 % Q1.3
-linkNumber = 3;
-bTin = GetTransformationWrtBase(biTei1, linkNumber)
-
 linkNumber_i = 1;
 linkNumber_j = 4;
 iTj = GetFrameWrtFrame(linkNumber_i, linkNumber_j, biTei1)
+
+linkNumber = 3;
+bTin = GetTransformationWrtBase(biTei1, linkNumber)
 
 bri = GetBasicVectorWrtBase(biTei1, linkNumber)
 %%
