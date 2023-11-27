@@ -7,7 +7,7 @@ function [] = PlotConfigurationDirectKinematic(numberOfSteps, qi, qf, geom_model
 % qf : final robot configuration
 % geom_model : tree of frames
 % linkType : specifies two possible link types: Rotational, Prismatic
-% n : plot number (it is useful to print in a for loop)
+% n : plot number (it is useful to print via a for loop)
 
 % Output:
 % the figure with the robot and its movements from qi to qf

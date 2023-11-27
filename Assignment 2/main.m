@@ -33,17 +33,13 @@ biTei4 = GetDirectGeometry(q4, geom_model, linkType);
 %%
 % Q1.3
 linkNumber = 3;
-for i = 1:linkNumber
-    bTin = GetTransformationWrtBase(biTei1, i);
-end
+bTin = GetTransformationWrtBase(biTei1, linkNumber)
 
-linkNumber_i = 0;
-linkNumber_j = 3;
-iTj = GetFrameWrtFrame(linkNumber_i, linkNumber_j, biTei1);
+linkNumber_i = 1;
+linkNumber_j = 4;
+iTj = GetFrameWrtFrame(linkNumber_i, linkNumber_j, biTei1)
 
-for i = 1:linkNumber
-    bri = GetBasicVectorWrtBase(biTei1, i);
-end
+bri = GetBasicVectorWrtBase(biTei1, linkNumber)
 %%
 % Q1.4
 % Hint: use plot3() and line() matlab functions. 
