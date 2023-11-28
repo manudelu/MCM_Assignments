@@ -14,12 +14,9 @@ if linkType == 0 % rotational
     Rz = [cos(qi) -sin(qi) 0; sin(qi) cos(qi) 0; 0 0 1];
     iRj = iTj(1:3, 1:3)*Rz;
     iTj_q = [iRj iTj(1:3, 4); 0 0 0 1];
-
 elseif linkType == 1 % prismatic
-    
-    % due to the config of the robot there isn't any prismatic joint
-    disp('Erros, due to the config of the robot there isnt any prismatic joint');
-
+    r = iTj(1:3,4) + iTj(1:3,3)*qi; 
+    iTj_q = [iTj(1:3,1:3) r; 0 0 0 1];
 end
 
 end
