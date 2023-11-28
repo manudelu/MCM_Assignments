@@ -55,25 +55,23 @@ qf = [qf1', qf2', qf3'];
 
 numberOfSteps = 100; 
 
-%for n = 1:6
-%    PlotMotion(numberOfSteps, qi(:,n), qf(:,n), geom_model, linkType, n)
-%end
+for n = 1:6
+    PlotMotion(numberOfSteps, qi(:,n), qf(:,n), geom_model, linkType, n)
+end
 
 %%
 % Q1.5
 
 qii = [0,0,0,0,0,0,0];
-qf4 = [pi/2,0,0,0,0,0,0];
-qf5 = [0,pi/2,0,0,0,0,0];
-qf6 = [0,0,pi/2,0,0,0,0];
-qf7 = [0,0,0,pi/2,0,0,0];
-qf8 = [0,0,0,0,pi/2,0,0];
-qf9 = [0,0,0,0,0,pi/2,0];
-qf10 = [0,0,0,0,0,0,pi/2];
+qf = zeros(7, 6);
+qff = zeros(7, 6);
 
-qff = [qf4', qf5', qf6', qf7', qf8', qf9', qf10'];
-
-for n = 1:numberOfLinks
-    PlotMotion(numberOfSteps, qii, qff(:,n), geom_model, linkType, n)
+for i = 1:length(linkType)-1
+    qf(:, i) = zeros(7, 1);
+    qf(i, i) = pi / 2;
+    qff(:, i) = qf(:, i)'; 
 end
 
+for n = 1:length(qff)-1
+    PlotMotion(numberOfSteps, qii, qff(:,n), geom_model, linkType, n)
+end
