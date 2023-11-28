@@ -46,21 +46,41 @@ bri = GetBasicVectorWrtBase(biTei1, linkNumber)
 qi1 = q1;
 qi2 = q3;
 qi3 = [1.3,0.1,0.1,1,0.2,0.3,1.3];
-qi4 = [3,0.5,0,0.1,0.8,0.7,0.3];
-qi5 = [1.2,0.2,0.7,2.1,1,0,0.9];
-qi6 = q1;
-qi = [qi1', qi2', qi3', qi4', qi5', qi6'];
+qi = [qi1', qi2', qi3'];
 
 qf1 = q4;
 qf2 = q1;
 qf3 = [2,2,2,2,2,2,2];
-qf4 = [2,3,4,2,1,3,2];
-qf5 = [2.3,1,0.4,1.7,1,0.3,1.5];
-qf6 = [0,pi/2,0,-pi/2,0,pi/4,0];
-qf = [qf1', qf2', qf3', qf4', qf5', qf6'];
+qf = [qf1', qf2', qf3'];
 
 numberOfSteps = 100; 
 
-for n = 1:6
-    PlotMotion(numberOfSteps, qi(:,n), qf(:,n), geom_model, linkType, n)
+%for n = 1:6
+%    PlotMotion(numberOfSteps, qi(:,n), qf(:,n), geom_model, linkType, n)
+%end
+
+%%
+% Q1.5
+
+qii = [0,0,0,0,0,0,0];
+qfi = qii;
+qf4 = [pi/2,0,0,0,0,0,0];
+qf5 = [0,pi/2,0,0,0,0,0];
+qf6 = [0,0,pi/2,0,0,0,0];
+qf7 = [0,0,0,pi/2,0,0,0];
+qf8 = [0,0,0,0,pi/2,0,0];
+qf9 = [0,0,0,0,0,pi/2,0];
+qf10 = [0,0,0,0,0,0,pi/2];
+
+for i = 1:numberOfLinks
+    qfi(:, i) = pi/2;
+    qfi(:, i-1) = 0;
+    qff(:, i) = qfi';
 end
+
+qff = [qf4', qf5', qf6', qf7', qf8', qf9', qf10'];
+
+for n = 1:numberOfLinks
+    PlotMotion(numberOfSteps, qii, qff(:,n), geom_model, linkType, n)
+end
+
