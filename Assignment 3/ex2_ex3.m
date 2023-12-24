@@ -23,9 +23,14 @@ bTe = getTransform(model.franka,[q_init',0,0],'panda_link7');%DO NOT EDIT
 % bTt = ...;
 
 % Goal definition 
-% bOg = ...;
-% ...
-% 
+bOge = [0.55; -0.3; 0.2];
+theta = pi/6;
+eRge = [ cos(theta) -sin(theta)  0;
+         sin(theta)  cos(theta)  0;
+         0           0           1; 
+     ];  % Elementary rotation of theta around the z-axis
+bRge = bTe(1:3,1:3)*eRge;
+bTge = [bRge bOge; 0 0 0 1];
 
 % Switch between the two cases (with and without the tool frame)
 tool = false; % change to true for using the tool
