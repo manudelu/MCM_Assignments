@@ -16,22 +16,20 @@ function J = GetJacobian(biTei, bTe, jointType)
     % Get the number of joints in the manipulator's structure
     n = size(jointType, 1);
     
-    % Initialize the Jacobian
+    % Initialize the Jacobian matrix
     J = zeros(6, n);
     
+    % Iterate through each joint to calculate the Jacobian columns
     for i = 1:n
         % Get the transformation matrix that describes the pose of the joint 
         % <i> w.r.t. the base of the manipulator
         bTi = GetTransformationWrtBase(biTei, i);
-        
-        % Fill the Jacobian's columns
 
         % Initialize the i-th column of the Jacobian
         h = zeros(6, 1);
 
-        % Unit vector that indicates the direction of the i-th joint's axis,
-        % since all the frames have been assigned s.t. the z axis points in the 
-        % direction of the joints' axes it holds 
+        % Extract the unit vector indicating the direction of the i-th joint's axis
+        % All frames are oriented such that the z-axis points along joint axes 
         k_i = bTi(1:3, 3);
         
         % Compute the distance vector between the end-effector and joint <i>
@@ -39,13 +37,14 @@ function J = GetJacobian(biTei, bTe, jointType)
         r_i0 = bTi(1:3, 4);      % position of <i> w.r.t. the base
         r_ei = r_e0 - r_i0;      % distance between end-eff and <i>
         
+        % Compute the Jacobian column based on joint type
         if(jointType == 0) 
-            % revolute joint
+            % For a revolute joint
             h = [k_i ; cross(k_i, r_ei)]; 
             J(:,i) = h;
         
         elseif(jointType == 1)       
-            % prismatic joint
+            % For a prismatic joint
             h = [0 ; 0 ; 0 ; k_i];
             J(:,i) = h;
         end
