@@ -16,21 +16,26 @@ qmax = [2.8973;1.7628;2.8973;-0.0698;2.8973;3.7525;2.8973];
 % configuration of the manipulator
 bTe = getTransform(model.franka,[q_init',0,0],'panda_link7');%DO NOT EDIT 
 
-% Tool frame definition
-% eOt = ...;
-% eRt = ...;
-% eTt = ...;
-% bTt = ...;
+bOg = [0.55, -0.3, 0.2]';
 
-% Goal definition 
-bOge = [0.55; -0.3; 0.2];
+% EE Goal Definition 
 theta = pi/6;
 eRge = [ cos(theta) -sin(theta)  0;
          sin(theta)  cos(theta)  0;
-         0           0           1; 
-     ];  % Elementary rotation of theta around the z-axis
+         0           0           1]; 
 bRge = bTe(1:3,1:3)*eRge;
-bTge = [bRge bOge; 0 0 0 1];
+bTge = [bRge bOg; 0 0 0 1];
+
+% Tool Frame Definition
+eTt = [eye(3) [0, 0, 0.2104]'; 0 0 0 1];
+bTt = bTe*eTt;
+phi = -44.98;
+tRgt = [ cos(phi) -sin(phi) 0; 
+         sin(phi)  cos(phi) 0; 
+         0         0        1]; 
+bRgt = bTt(1:3,1:3)*tRgt;
+% Bro dice di nuovo theta = pi/6 ma prima fa riferimento a phi
+bTgt = [bRgt bOg; 0 0 0 1]; 
 
 % Switch between the two cases (with and without the tool frame)
 tool = false; % change to true for using the tool
@@ -73,11 +78,11 @@ for i = t
         % ang_err = ...
     end
     
-       
     %% Compute the reference velocities
-   
+     
     %% Compute desired joint velocities 
-    
+    q_dot = pinv(bJe)*x_dot;
+
     %% Simulate the robot - implement the function KinematicSimulation()
     q = KinematicSimulation(q(1:7), q_dot,ts, qmin, qmax);
     
