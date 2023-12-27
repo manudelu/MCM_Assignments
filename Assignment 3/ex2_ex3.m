@@ -20,21 +20,20 @@ bOg = [0.55, -0.3, 0.2]';
 
 % EE Goal Definition 
 theta = pi/6;
-eRge = [ cos(theta) -sin(theta)  0;
-         sin(theta)  cos(theta)  0;
-         0           0           1]; 
+eRge = [ cos(theta)   0   sin(theta);
+         0            1   0;
+         -sin(theta)  0   cos(theta)]; 
 bRge = bTe(1:3,1:3)*eRge;
 bTge = [bRge bOg; 0 0 0 1];
 
 % Tool Frame Definition
 eTt = [eye(3) [0, 0, 0.2104]'; 0 0 0 1];
 bTt = bTe*eTt;
-phi = -44.98;
-tRgt = [ cos(phi) -sin(phi) 0; 
-         sin(phi)  cos(phi) 0; 
-         0         0        1]; 
+%phi = -44.98;
+tRgt = [ cos(theta)   0   sin(theta);
+         0            1   0;
+         -sin(theta)  0   cos(theta)]; 
 bRgt = bTt(1:3,1:3)*tRgt;
-% Bro dice di nuovo theta = pi/6 ma prima fa riferimento a phi
 bTgt = [bRgt bOg; 0 0 0 1]; 
 
 % Switch between the two cases (with and without the tool frame)
