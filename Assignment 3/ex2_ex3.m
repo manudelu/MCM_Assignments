@@ -57,6 +57,14 @@ for i = t
         % bJt = ... 
         % lin_err = ...
         % ang_err = ...
+
+        % Compute the reference velocities
+        w_t = angular_gain * error_angular;
+        v_t = linear_gain * error_linear;
+        x_dot = [w_t; v_t];
+    
+        % Compute desired joint velocities 
+        q_dot = pinv(bJt)*x_dot;
         
     else % compute the error between the e-e frame and goal frame
         % Computing transformation matrix from base to end effector 
@@ -66,12 +74,15 @@ for i = t
         bJe = tmp(1:6,1:7); %DO NOT EDIT
         % lin_err = ...
         % ang_err = ...
-    end
+
+        % Compute the reference velocities
+        w_e = angular_gain * error_angular;
+        v_e = linear_gain * error_linear;
+        x_dot = [w_e; v_e];
     
-    %% Compute the reference velocities
-     
-    %% Compute desired joint velocities 
-    q_dot = pinv(bJe)*x_dot;
+        % Compute desired joint velocities 
+        q_dot = pinv(bJe)*x_dot;
+    end
 
     %% Simulate the robot - implement the function KinematicSimulation()
     q = KinematicSimulation(q(1:7), q_dot,ts, qmin, qmax);
@@ -92,5 +103,10 @@ for i = t
     if(norm(x_dot) < 0.001)
         disp('REACHED THE REQUESTED GOAL POSITION')
         break
+    end
+    % refreshing the window every loop-1.
+    if i < t_end 
+        % function that clean the window.
+        cla();
     end
 end
