@@ -17,28 +17,21 @@ qmax = [2.8973;1.7628;2.8973;-0.0698;2.8973;3.7525;2.8973];
 bTe = getTransform(model.franka,[q_init',0,0],'panda_link7');%DO NOT EDIT 
 
 bOg = [0.55, -0.3, 0.2]';
-
-% EE Goal Definition 
 theta = pi/6;
-eRge = [ cos(theta)   0   sin(theta);
-         0            1   0;
-         -sin(theta)  0   cos(theta)]; 
-bRge = bTe(1:3,1:3)*eRge;
-
-% Tool Frame Definition
-eTt = [eye(3) [0, 0, 0.2104]'; 0 0 0 1];
-bTt = bTe*eTt;
-%phi = -44.98;
-tRgt = [ cos(theta)   0   sin(theta);
-         0            1   0;
-         -sin(theta)  0   cos(theta)]; 
-bRgt = bTt(1:3,1:3)*tRgt;
+phi = -44.98;
 
 % Switch between the two cases (with and without the tool frame)
 tool = false; % change to true for using the tool
 if tool == true
+    eRt = [cos(phi)  -sin(phi)  0; sin(phi)  cos(phi)  0; 0  0  1];
+    eTt = [eRt [0, 0, 0.2104]'; 0 0 0 1];
+    bTt = bTe(1:3,1:3)*eTt(1:3,1:3);
+    tRgt = [cos(theta)  0  sin(theta); 0  1  0; -sin(theta)  0  cos(theta)]; 
+    bRgt = bTt(1:3,1:3)*tRgt;
     bTgt = [bRgt bOg; 0 0 0 1];  % if controlling the tool frame
 else
+    eRge = [cos(theta) 0 sin(theta); 0  1  0; -sin(theta)  0  cos(theta)]; 
+    bRge = bTe(1:3,1:3)*eRge;
     bTge = [bRge bOg; 0 0 0 1];  % if controlling the ee frame
 end   
 
