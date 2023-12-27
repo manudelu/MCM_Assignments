@@ -24,7 +24,6 @@ eRge = [ cos(theta)   0   sin(theta);
          0            1   0;
          -sin(theta)  0   cos(theta)]; 
 bRge = bTe(1:3,1:3)*eRge;
-bTge = [bRge bOg; 0 0 0 1];
 
 % Tool Frame Definition
 eTt = [eye(3) [0, 0, 0.2104]'; 0 0 0 1];
@@ -34,14 +33,13 @@ tRgt = [ cos(theta)   0   sin(theta);
          0            1   0;
          -sin(theta)  0   cos(theta)]; 
 bRgt = bTt(1:3,1:3)*tRgt;
-bTgt = [bRgt bOg; 0 0 0 1]; 
 
 % Switch between the two cases (with and without the tool frame)
 tool = false; % change to true for using the tool
 if tool == true
-    %bTg = ...; % if controlling the tool frame
+    bTgt = [bRgt bOg; 0 0 0 1];  % if controlling the tool frame
 else
-    %bTg = ...; % if controlling the ee frame
+    bTge = [bRge bOg; 0 0 0 1];  % if controlling the ee frame
 end   
 
 % Control Proportional Gain 
@@ -101,10 +99,5 @@ for i = t
     if(norm(x_dot) < 0.001)
         disp('REACHED THE REQUESTED GOAL POSITION')
         break
-    end
-    % refreshing the window every loop-1.
-    if i < t_end 
-        % function that clean the window.
-        cla();
     end
 end
