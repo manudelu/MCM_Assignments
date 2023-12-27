@@ -102,4 +102,9 @@ for i = t
         disp('REACHED THE REQUESTED GOAL POSITION')
         break
     end
+    % refreshing the window every loop-1.
+    if i < t_end 
+        % function that clean the window.
+        cla();
+    end
 end
