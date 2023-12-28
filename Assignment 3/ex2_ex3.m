@@ -55,16 +55,17 @@ for i = t
         tmp = geometricJacobian(model.franka,[q',0,0],'panda_link7'); %DO NOT EDIT
         bJe = tmp(1:6,1:7); %DO NOT EDIT
         % rigid body transformation matrix from e-e frame to rigid-tool frame projected on base
-        RBT_eet = [         eye(3)                        zeros(3);
+        bTeet = [         eye(3)                        zeros(3);
                    -Skew(bTe(1:3,1:3) * eTt(1:3,4))       eye(3)      ];
         % Calculation of the Jacobian matrix from base to rigid-tool with rbt
         bJt = RBT_eet * bJe;
-        error_linear = bTgt(1:3,4) - bTt(1:3,4);
-        % ang_err = ...
+        lin_err = bTgt(1:3,4) - bTt(1:3,4);
+        [theta, h] = ComputeInverseAngleAxis(tRgt);
+        ang_err = bTt(1:3,1:3)*h*theta;
 
         % Compute the reference velocities
-        w_t = angular_gain * error_angular;
-        v_t = linear_gain * error_linear;
+        w_t = angular_gain * ang_err;
+        v_t = linear_gain * lin_err;
         x_dot = [w_t; v_t];
     
         % Compute desired joint velocities 
@@ -76,12 +77,13 @@ for i = t
         % Computing end effector jacobian w.r.t. base
         tmp = geometricJacobian(model.franka,[q',0,0],'panda_link7'); %DO NOT EDIT
         bJe = tmp(1:6,1:7); %DO NOT EDIT
-        error_linear = bTge(1:3,4) - bTe(1:3,4);
-        % ang_err = ...
+        lin_err = bTge(1:3,4) - bTe(1:3,4);
+        [theta, h] = ComputeInverseAngleAxis(eRge);
+        ang_err = bTe(1:3,1:3)*h*theta;
 
         % Compute the reference velocities
-        w_e = angular_gain * error_angular;
-        v_e = linear_gain * error_linear;
+        w_e = angular_gain * ang_err;
+        v_e = linear_gain * lin_err;
         x_dot = [w_e; v_e];
     
         % Compute desired joint velocities 
