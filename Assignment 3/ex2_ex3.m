@@ -78,7 +78,7 @@ for i = t
         tmp = geometricJacobian(model.franka,[q',0,0],'panda_link7'); %DO NOT EDIT
         bJe = tmp(1:6,1:7); %DO NOT EDIT
         lin_err = bTge(1:3,4) - bTe(1:3,4);
-        [theta, h] = ComputeInverseAngleAxis(eRge);
+        [theta, h] = ComputeInverseAngleAxis(bRge);
         ang_err = bTe(1:3,1:3)*h*theta;
 
         % Compute the reference velocities
