@@ -54,8 +54,12 @@ for i = t
         bTe = getTransform(model.franka,[q',0,0],'panda_link7'); %DO NOT EDIT
         tmp = geometricJacobian(model.franka,[q',0,0],'panda_link7'); %DO NOT EDIT
         bJe = tmp(1:6,1:7); %DO NOT EDIT
-        % bJt = ... 
-        % lin_err = ...
+        % rigid body transformation matrix from e-e frame to rigid-tool frame projected on base
+        RBT_eet = [         eye(3)                        zeros(3);
+                   -Skew(bTe(1:3,1:3) * eTt(1:3,4))       eye(3)      ];
+        % Calculation of the Jacobian matrix from base to rigid-tool with rbt
+        bJt = RBT_eet * bJe;
+        error_linear = bTgt(1:3,4) - bTt(1:3,4);
         % ang_err = ...
 
         % Compute the reference velocities
@@ -72,12 +76,12 @@ for i = t
         % Computing end effector jacobian w.r.t. base
         tmp = geometricJacobian(model.franka,[q',0,0],'panda_link7'); %DO NOT EDIT
         bJe = tmp(1:6,1:7); %DO NOT EDIT
-        lin_err = bTge(1:3, 4)-bTe(1:3, 4);
-        %ang_err = ;
+        error_linear = bTge(1:3,4) - bTe(1:3,4);
+        % ang_err = ...
 
         % Compute the reference velocities
-        w_e = angular_gain * ang_err;
-        v_e = linear_gain * lin_err;
+        w_e = angular_gain * error_angular;
+        v_e = linear_gain * error_linear;
         x_dot = [w_e; v_e];
     
         % Compute desired joint velocities 
@@ -94,10 +98,10 @@ for i = t
     if tool == true
         %set the window size of the figure to "full-screen" for a better visualization
         plot3(bTt(1,4),bTt(2,4),bTt(3,4),'go','LineWidth',15);
-        plot3(bOg(1),bOg(2),bOg(3),'ro','LineWidth',5);
+        plot3(bOgt(1),bOgt(2),bOgt(3),'ro','LineWidth',5);
     else
         plot3(bTe(1,4),bTe(2,4),bTe(3,4),'go','LineWidth',15);
-        plot3(bOg(1),bOg(2),bOg(3),'ro','LineWidth',5);
+        plot3(bOge(1),bOge(2),bOge(3),'ro','LineWidth',5);
     end
     drawnow
     if(norm(x_dot) < 0.001)
