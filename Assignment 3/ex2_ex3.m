@@ -78,7 +78,7 @@ for i = t
         tmp = geometricJacobian(model.franka,[q',0,0],'panda_link7'); %DO NOT EDIT
         bJe = tmp(1:6,1:7); %DO NOT EDIT
         lin_err = bTge(1:3,4) - bTe(1:3,4);
-        [theta, h] = ComputeInverseAngleAxis(bRge);
+        [theta, h] = ComputeInverseAngleAxis(eRge);
         ang_err = bTe(1:3,1:3)*h*theta;
 
         % Compute the reference velocities
@@ -100,10 +100,10 @@ for i = t
     if tool == true
         %set the window size of the figure to "full-screen" for a better visualization
         plot3(bTt(1,4),bTt(2,4),bTt(3,4),'go','LineWidth',15);
-        plot3(bOgt(1),bOgt(2),bOgt(3),'ro','LineWidth',5);
+        plot3(bOg(1),bOg(2),bOg(3),'ro','LineWidth',5);
     else
         plot3(bTe(1,4),bTe(2,4),bTe(3,4),'go','LineWidth',15);
-        plot3(bOge(1),bOge(2),bOge(3),'ro','LineWidth',5);
+        plot3(bOg(1),bOg(2),bOg(3),'ro','LineWidth',5);
     end
     drawnow
     if(norm(x_dot) < 0.001)
