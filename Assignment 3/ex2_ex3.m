@@ -21,7 +21,7 @@ theta = pi/6;
 phi = -44.98;
 
 % Switch between the two cases (with and without the tool frame)
-tool = false; % change to true for using the tool
+tool = true; % change to true for using the tool
 if tool == true
     eRt = [cos(phi)  -sin(phi)  0; sin(phi)  cos(phi)  0; 0  0  1];
     eTt = [eRt [0, 0, 0.2104]'; 0 0 0 1];
@@ -52,21 +52,25 @@ for i = t
         
         % Computing transformation matrix from base to end effector 
         bTe = getTransform(model.franka,[q',0,0],'panda_link7'); %DO NOT EDIT
+        bTt = bTe*eTt;
         tmp = geometricJacobian(model.franka,[q',0,0],'panda_link7'); %DO NOT EDIT
         bJe = tmp(1:6,1:7); %DO NOT EDIT
-        % rigid body transformation matrix from e-e frame to rigid-tool frame projected on base
-        bTeet = [         eye(3)                        zeros(3);
-                   -Skew(bTe(1:3,1:3) * eTt(1:3,4))       eye(3)      ];
-        % Calculation of the Jacobian matrix from base to rigid-tool with rbt
-        bJt = RBT_eet * bJe;
+
+        % Compute error at each step
         lin_err = bTgt(1:3,4) - bTt(1:3,4);
-        [theta, h] = ComputeInverseAngleAxis(tRgt);
+        [theta, h] = ComputeInverseAngleAxis(eRt);
         ang_err = bTt(1:3,1:3)*h*theta;
 
         % Compute the reference velocities
         w_t = angular_gain * ang_err;
         v_t = linear_gain * lin_err;
         x_dot = [w_t; v_t];
+
+        % Rigid body transformation
+        skew_matrix =[0 -eTt(3,4) eTt(2,4) ; eTt(3,4) 0 -eTt(1,4) ; -eTt(2,4) eTt(1,4) 0]; 
+        eeTt = [eye(3) zeros(3,3); skew_matrix eye(3)];
+        % Calculation of the Jacobian matrix from base to rigid-tool with rbt
+        bJt = eeTt * bJe;
     
         % Compute desired joint velocities 
         q_dot = pinv(bJt)*x_dot;
@@ -77,6 +81,8 @@ for i = t
         % Computing end effector jacobian w.r.t. base
         tmp = geometricJacobian(model.franka,[q',0,0],'panda_link7'); %DO NOT EDIT
         bJe = tmp(1:6,1:7); %DO NOT EDIT
+
+        % Compute error at each step
         lin_err = bTge(1:3,4) - bTe(1:3,4);
         [theta, h] = ComputeInverseAngleAxis(eRge);
         ang_err = bTe(1:3,1:3)*h*theta;
@@ -99,7 +105,7 @@ for i = t
     hold on
     if tool == true
         %set the window size of the figure to "full-screen" for a better visualization
-        plot3(bTt(1,4),bTt(2,4),bTt(3,4),'go','LineWidth',15);
+        plot3(bTe(1,4),bTe(2,4),bTe(3,4),'go','LineWidth',15);
         plot3(bOg(1),bOg(2),bOg(3),'ro','LineWidth',5);
     else
         plot3(bTe(1,4),bTe(2,4),bTe(3,4),'go','LineWidth',15);
