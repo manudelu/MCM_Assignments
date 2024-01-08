@@ -38,7 +38,7 @@ disp('aRb ex 1.3:');disp(aRb);
 plotRotation(theta,v,aRb);
 disp('theta ex 1.3:');disp(theta);
 disp('v ex 1.3:');disp(v);
-
+%%
 % 1.4.
 theta = 3*pi/4;
 v = [0 0 1];
@@ -162,13 +162,13 @@ disp('v ex 1.8:');disp(v);
 
     % a
         %rotation matrix from <w> to frame <b> by rotating around z-axes
-        wRb_z = [cos(pi/6) -sin(pi/6) 0; sin(pi/6) cos(pi/6) 0; 0 0 1];
+        wRb_z = [cos(pi/4) -sin(pi/4) 0; sin(pi/4) cos(pi/4) 0; 0 0 1];
     % b
         %rotation matrix from <w> to frame <b> by rotating around y-axes
-        wRb_y = [cos(pi/4) 0 sin(pi/4); 0 1 0; -sin(pi/4) 0 cos(pi/4)];
+        wRb_y = [cos(pi/3) 0 sin(pi/3); 0 1 0; -sin(pi/3) 0 cos(pi/3)];
     % c
         %rotation matrix from <w> to frame <b> by rotating around x-axes
-        wRb_x = [1 0 0; 0 cos(pi/12) -sin(pi/12); 0 sin(pi/12) cos(pi/12)];
+        wRb_x = [1 0 0; 0 cos(-pi/6) -sin(-pi/6); 0 sin(-pi/6) cos(-pi/6)];
 
 
         disp('es 3.1:');disp(wRb_z);disp(wRb_y);disp(wRb_x);
