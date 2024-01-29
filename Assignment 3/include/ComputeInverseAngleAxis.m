@@ -12,31 +12,46 @@ function [theta,v] = ComputeInverseAngleAxis(R)
     % NB: Enter a square, 3x3 proper-orthogonal matrix to calculate its angle
     % and axis of rotation. Error messages must be displayed if the matrix
     % does not satisfy the rotation matrix criteria.
-    detR = int8(det(R));
-    orthMatrix = abs(int8(R * R'));
+    
     % Check matrix R to see if its size is 3x3
-    if(size(R) == size(eye(3)))
+    if size(R) == [3,3]
+        
         % Check matrix R to see if it is orthogonal
-        if(orthMatrix == int8(eye(3)))
+        tolerance=1e-4;
+        if (abs(R*R.'-eye(3))<(ones(3)*tolerance))
             % Check matrix R to see if it is proper: det(R) = 1
-            if(detR == 1)
+            
+            if abs(det(R)-1)<1*tolerance
                 % Compute the angle of rotation
-                theta = acos((trace(R)-1) / 2);
-                % Calculate eigenvalues and eigenvectors of R
-                [eigenvectors, eigenvalues] = eig(R);
-                % Compute the axis of rotation
-                for row=1:3
-                    for column=1:3
-                        if(int8((eigenvalues(row,column))) == 1)
-                            v = eigenvectors(:,column);
-                        end
+                theta=acos((trace(R)-1)/2);
+                %if the sin(theta) is equal to zero, I cannot use the vex
+                %solution
+                
+               if  sin(theta)==0
+                    % Calculate eigenvalues and eigenvectors of R
+                    [V,D]=eig(R);
+                    eigenvalues=diag(D);
+               
+                    % Compute the axis of rotation
+                    indx=find(abs(eigenvalues-1)<tolerance);
+                    v=V(:,indx);
+                    %choose correct axis unit vector
+                    if abs(ComputeAngleAxis(theta,-v)-R)<ones(3)*1e-4
+                       v=-v;
                     end
+                else
+                    R1 = (R-transpose(R))/2;
+                    vex = [R1(3,2) R1(1,3) R1(2,1)];
+                    v = vex / sin(theta);
                 end
+
+               
+
             else
-              err('DETERMINANT OF THE INPUT MATRIX IS NOT 1')
+                err('DETERMINANT OF THE INPUT MATRIX IS NOT 1')  
             end
         else
-             err('NOT ORTHOGONAL INPUT MATRIX')
+            err('NOT ORTHOGONAL INPUT MATRIX')
         end
     else
        err('WRONG SIZE OF THE INPUT MATRIX')
