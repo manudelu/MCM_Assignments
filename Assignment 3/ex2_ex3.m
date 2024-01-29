@@ -21,7 +21,7 @@ theta = pi/6;
 phi = -44.98;
 
 % Switch between the two cases (with and without the tool frame)
-tool = true; % change to true for using the tool
+tool = false; % change to true for using the tool
 if tool == true
     eRt = [cos(phi)  -sin(phi)  0; sin(phi)  cos(phi)  0; 0  0  1];
     eTt = [eRt [0, 0, 0.2104]'; 0 0 0 1];
@@ -58,8 +58,9 @@ for i = t
 
         % Compute error at each step
         lin_err = bTgt(1:3,4) - bTt(1:3,4);
-        [theta, h] = ComputeInverseAngleAxis(eRt);
-        ang_err = bTt(1:3,1:3)*h*theta;
+        bRg = bTt(1:3,1:3);
+        [theta, h] = ComputeInverseAngleAxis(bRg'*bRgt);
+        ang_err = bRg*h'*theta; 
 
         % Compute the reference velocities
         w_t = angular_gain * ang_err;
@@ -84,8 +85,9 @@ for i = t
 
         % Compute error at each step
         lin_err = bTge(1:3,4) - bTe(1:3,4);
-        [theta, h] = ComputeInverseAngleAxis(eRge);
-        ang_err = bTe(1:3,1:3)*h*theta;
+        bRe = bTe(1:3,1:3);
+        [theta, h] = ComputeInverseAngleAxis(bRe'*bRge);
+        ang_err = bRe*h'*theta; 
 
         % Compute the reference velocities
         w_e = angular_gain * ang_err;
