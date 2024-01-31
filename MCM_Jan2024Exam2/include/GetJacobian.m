@@ -14,7 +14,7 @@ function J = GetJacobian(biTei, bTe, jointType)
 % - J: end-effector jacobian matrix
 
     % Get the number of joints in the manipulator's structure
-    n = size(jointType, 1);
+    n = length(jointType);
     
     % Initialize the Jacobian matrix
     J = zeros(6, n);
