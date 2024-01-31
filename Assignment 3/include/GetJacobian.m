@@ -14,7 +14,7 @@ function J = GetJacobian(biTei, bTe, jointType)
 % - J: end-effector jacobian matrix
 
     % Get the number of joints in the manipulator's structure
-    n = size(jointType, 1);
+    n = length(jointType);
     
     % Initialize the Jacobian matrix
     J = zeros(6, n);
@@ -38,12 +38,12 @@ function J = GetJacobian(biTei, bTe, jointType)
         r_ei = r_e0 - r_i0;      % distance between end-eff and <i>
         
         % Compute the Jacobian column based on joint type
-        if(jointType == 0) 
+        if(jointType(i) == 0) 
             % For a revolute joint
             h = [k_i ; cross(k_i, r_ei)]; 
             J(:,i) = h;
         
-        elseif(jointType == 1)       
+        elseif(jointType(i) == 1)       
             % For a prismatic joint
             h = [0 ; 0 ; 0 ; k_i];
             J(:,i) = h;
