@@ -13,44 +13,40 @@ function J = GetJacobian(biTei, bTe, jointType)
 % Output:
 % - J: end-effector jacobian matrix
 
-numberOfLinks = size(jointType,1);
-J = zeros(6,numberOfLinks);
-
-bTi = zeros(4,4,numberOfLinks);
-for i = 1:numberOfLinks
-    bTi(:,:,i) = GetTransformationWrtBase(biTei,i);
-end
-
-for i = 1:numberOfLinks
-
-%angular jacobian
+    % Get the number of joints in the manipulator's structure
+    n = size(jointType, 1);
     
-    if jointType(i) == 0        %if link i is revolute
-
-        ki = bTi(1:3,3,i);      %take the rotational axis (z-axis of the joint frame wrt base)
-        J(1:3,i) = ki; 
+    % Initialize the Jacobian matrix
+    J = zeros(6, n);
     
-    else                        %if link i is prismatic
+    % Iterate through each joint to calculate the Jacobian columns
+    for i = 1:n
+        % Get the transformation matrix that describes the pose of the joint 
+        % <i> w.r.t. the base of the manipulator
+        bTi = GetTransformationWrtBase(biTei, i);
 
-        J(1:3,i) = zeros(3,1);  %set to zero
+        % Initialize the i-th column of the Jacobian
+        h = zeros(6, 1);
+
+        % Extract the unit vector indicating the direction of the i-th joint's axis
+        % All frames are oriented such that the z-axis points along joint axes 
+        k_i = bTi(1:3, 3);
         
-    end
-
-%linear jacobian
-    
-    if jointType(i) == 0        %if joint i is revolute
-
-        ki = bTi(1:3,3,i);
-        bri = bTi(1:3,4,i);     %vector from base to joint i
-        bre = bTe (1:3,4);      %vector from base to EE
-        ire = bre - bri;        %vector from joint i to EE
-        J(4:6,i) = cross(ki,ire);    
-    
-    else                        %if joint is prismatic
-
-        ki = bTi(1:3,3);        %prismatic axis
-        J(4:6,i) = ki;
+        % Compute the distance vector between the end-effector and joint <i>
+        r_e0 = bTe(1:3, 4);      % position of the end-eff w.r.t. the base
+        r_i0 = bTi(1:3, 4);      % position of <i> w.r.t. the base
+        r_ei = r_e0 - r_i0;      % distance between end-eff and <i>
         
+        % Compute the Jacobian column based on joint type
+        if(jointType(i) == 0) 
+            % For a revolute joint
+            h = [k_i ; cross(k_i, r_ei)]; 
+            J(:,i) = h;
+        
+        elseif(jointType(i) == 1)       
+            % For a prismatic joint
+            h = [0 ; 0 ; 0 ; k_i];
+            J(:,i) = h;
+        end
     end
-
 end
